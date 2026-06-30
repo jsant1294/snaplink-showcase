@@ -260,7 +260,7 @@ export default function Hero() {
               loadOnMobile
               mobileOnly
               preload={index === 0 ? "metadata" : "none"}
-              rootMargin="520px"
+              rootMargin="220px"
             />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.58),rgba(5,5,5,0.36)_34%,rgba(5,5,5,0.88))]" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_68%_24%,rgba(199,164,91,0.18),transparent_18rem)]" />

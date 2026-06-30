@@ -39,7 +39,8 @@ export default function ResponsiveVideo({
   const [failed, setFailed] = useState(false);
   const [hasResolvedMedia, setHasResolvedMedia] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [isVisible, setIsVisible] = useState(eager);
+  const [isNearViewport, setIsNearViewport] = useState(eager);
+  const [isPlayableVisible, setIsPlayableVisible] = useState(eager);
   const [ready, setReady] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
 
@@ -51,7 +52,7 @@ export default function ResponsiveVideo({
     hasResolvedMedia &&
     !failed &&
     !reducedMotion &&
-    isVisible &&
+    isNearViewport &&
     (!mobileOnly || isMobile) &&
     (!isMobile || loadOnMobile);
 
@@ -86,7 +87,7 @@ export default function ResponsiveVideo({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsVisible(entry.isIntersecting);
+        setIsNearViewport(entry.isIntersecting);
       },
       { rootMargin, threshold: 0.12 }
     );
@@ -96,10 +97,25 @@ export default function ResponsiveVideo({
   }, [eager, rootMargin]);
 
   useEffect(() => {
+    const element = wrapperRef.current;
+    if (!element || eager) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsPlayableVisible(entry.isIntersecting);
+      },
+      { rootMargin: "0px", threshold: 0.45 }
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [eager]);
+
+  useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    if (!autoPlayWhenVisible || !isVisible || reducedMotion) {
+    if (!autoPlayWhenVisible || !isPlayableVisible || reducedMotion) {
       video.pause();
       return;
     }
@@ -110,7 +126,7 @@ export default function ResponsiveVideo({
         setFailed(true);
       });
     }
-  }, [autoPlayWhenVisible, isVisible, ready, reducedMotion, source]);
+  }, [autoPlayWhenVisible, isPlayableVisible, ready, reducedMotion, source]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -150,6 +166,7 @@ export default function ResponsiveVideo({
             ready ? "opacity-100" : "opacity-0"
           } ${videoClassName}`}
           key={source}
+          autoPlay={autoPlayWhenVisible}
           loop
           muted
           playsInline

@@ -20,11 +20,11 @@ const displayFeatures = [
 
 function DigitalDisplayImage() {
   return (
-    <div className="digital-display-frame relative overflow-hidden border border-gilt/24 bg-black shadow-velvet">
-      <div className="digital-display-glow absolute left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gilt/18 blur-3xl" />
+    <div className="digital-display-frame relative overflow-hidden rounded-[10px] border border-gilt/30 bg-black shadow-velvet">
+      <div className="digital-display-glow absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gilt/20 blur-3xl" />
       <img
         alt="SnapLink storefront TV menu boards showing digital menus, promotions, QR ordering, and in-store signage."
-        className="relative z-10 aspect-[16/10] h-full w-full object-cover transition duration-700 hover:scale-[1.025]"
+        className="relative z-10 aspect-[16/10] h-full w-full object-cover transition duration-700 hover:scale-[1.018] sm:aspect-[16/9]"
         src="/images/snaplink-storefront-tv-panels-preview.jpg"
       />
       <div className="pointer-events-none absolute inset-0 z-20 bg-[linear-gradient(115deg,rgba(255,255,255,0.08),transparent_22%,transparent_72%,rgba(199,164,91,0.12))]" />
@@ -98,9 +98,9 @@ export default function DigitalDisplaysSection() {
   }, []);
 
   return (
-    <section id="digital-displays" ref={sectionRef} className="relative overflow-hidden bg-ink py-24 sm:py-32">
+    <section id="digital-displays" ref={sectionRef} className="relative overflow-hidden bg-ink py-20 sm:py-32">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(199,164,91,0.12),transparent_28rem),radial-gradient(circle_at_82%_74%,rgba(245,239,226,0.06),transparent_24rem)]" />
-      <div className="maison-shell relative z-10 grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+      <div className="maison-shell relative z-10 grid items-center gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:gap-16">
         <div>
           <p className="digital-copy editorial-label mb-5 text-xs text-gilt/85">
             {t({ en: "DIGITAL DISPLAYS", es: "PANTALLAS DIGITALES" })}
@@ -142,7 +142,7 @@ export default function DigitalDisplaysSection() {
             ))}
           </div>
         </div>
-        <div ref={imageRef}>
+        <div ref={imageRef} className="lg:-mr-10 xl:-mr-16">
           <DigitalDisplayImage />
         </div>
       </div>

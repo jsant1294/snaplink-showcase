@@ -197,6 +197,7 @@ export default function Hero() {
     if (!section) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const mobileHero = window.matchMedia("(max-width: 639px)").matches;
     const ctx = gsap.context(() => {
       const layers = gsap.utils.toArray<HTMLElement>(".cinematic-video-layer");
       const panels = gsap.utils.toArray<HTMLElement>(".cinematic-story-panel");
@@ -208,7 +209,7 @@ export default function Hero() {
       gsap.set(panels.slice(1), { opacity: 0, y: 26 });
       gsap.set(objects.slice(1), { opacity: 0, y: 34, scale: 0.94, rotate: -4 });
 
-      if (reducedMotion) return;
+      if (reducedMotion || mobileHero) return;
 
       const tl = gsap.timeline({
         defaults: { ease: "none" },
@@ -241,7 +242,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative h-screen min-h-[720px] overflow-hidden sm:min-h-screen">
+    <section ref={sectionRef} className="relative min-h-[100svh] overflow-hidden sm:h-screen sm:min-h-screen">
       <div className="absolute inset-0">
         {videoScenes.map((src, index) => (
           <CinematicVideoLayer src={src} index={index} key={src} />
@@ -263,8 +264,8 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="maison-shell relative z-10 grid h-full items-center gap-10 pb-12 pt-24 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
-        <div className="relative min-h-[430px] sm:min-h-[460px] lg:min-h-[520px]">
+      <div className="maison-shell relative z-10 grid min-h-[100svh] items-center gap-10 pb-24 pt-36 sm:h-full sm:pb-12 sm:pt-24 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
+        <div className="relative min-h-[610px] sm:min-h-[460px] lg:min-h-[520px]">
           {storyScenes.map((scene, index) => (
             <div
               className="cinematic-story-panel absolute inset-x-0 top-0 max-w-4xl opacity-0"
@@ -299,7 +300,7 @@ export default function Hero() {
           ))}
         </div>
 
-        <div className="cinematic-object-stage pointer-events-none absolute bottom-10 right-2 h-[220px] w-[210px] [perspective:1000px] sm:relative sm:bottom-auto sm:right-auto sm:mx-auto sm:h-[420px] sm:w-full sm:max-w-[360px] lg:h-[520px] lg:max-w-[440px]">
+        <div className="cinematic-object-stage pointer-events-none hidden [perspective:1000px] sm:relative sm:bottom-auto sm:right-auto sm:mx-auto sm:flex sm:h-[420px] sm:w-full sm:max-w-[360px] lg:h-[520px] lg:max-w-[440px]">
           <div className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gilt/15 blur-3xl" />
           {objectScenes.map((object, index) => (
             <div
@@ -313,7 +314,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="pointer-events-none absolute bottom-5 left-1/2 z-20 h-12 w-px -translate-x-1/2 overflow-hidden bg-cream/15">
+      <div className="pointer-events-none absolute bottom-5 left-1/2 z-20 hidden h-12 w-px -translate-x-1/2 overflow-hidden bg-cream/15 sm:block">
         <div className="h-1/2 w-full animate-[shine_2.2s_ease-in-out_infinite] bg-gilt" />
       </div>
     </section>

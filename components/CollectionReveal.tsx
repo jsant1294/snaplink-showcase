@@ -145,10 +145,10 @@ export default function CollectionReveal() {
             </article>
           ))}
         </div>
-        <div className="relative z-10 mt-10 grid gap-3 border-y border-gilt/18 py-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="relative z-10 mt-10 grid gap-4 border-y border-gilt/18 py-5 text-center sm:grid-cols-2 sm:text-left lg:grid-cols-4">
           {valueRows.map((item) => (
             <p
-              className="text-xs font-semibold uppercase tracking-[0.18em] text-cream/72 sm:border-r sm:border-gilt/18 sm:last:border-r-0"
+              className="text-xs font-semibold uppercase leading-6 tracking-[0.18em] text-cream/72 sm:border-r sm:border-gilt/18 sm:last:border-r-0"
               key={item.en}
             >
               {t(item)}

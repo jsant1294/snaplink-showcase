@@ -10,7 +10,7 @@ import { useLenisSmoothScroll } from "@/lib/motion";
 gsap.registerPlugin(ScrollTrigger);
 
 const videoScenes = [
-  "hero-fashion-loop",
+  "update-hero-one",
   "scarf-loop",
   "handbag-loop",
   "snaplink-phone-loop",

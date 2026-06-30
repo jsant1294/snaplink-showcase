@@ -8,6 +8,7 @@ ORIGINALS_DIR="$VIDEOS_DIR/originals"
 mkdir -p "$ORIGINALS_DIR"
 
 VIDEOS=(
+  "update-hero-one"
   "hero-fashion-loop"
   "scarf-loop"
   "handbag-loop"

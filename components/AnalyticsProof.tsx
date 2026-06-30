@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLanguage } from "@/components/LanguageProvider";
+import ResponsiveVideo from "@/components/ResponsiveVideo";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -28,22 +29,15 @@ const categories = [
 
 function DashboardVisual() {
   const [imageFailed, setImageFailed] = useState(false);
-  const [videoFailed, setVideoFailed] = useState(false);
 
   return (
     <div className="analytics-dashboard relative overflow-hidden border border-gilt/18 bg-black shadow-velvet">
-      {!videoFailed ? (
-        <video
-          className="absolute inset-0 h-full w-full object-cover opacity-20 blur-[1px]"
-          src="/videos/analytics-loop.mp4"
-          muted
-          playsInline
-          autoPlay
-          loop
-          preload="metadata"
-          onError={() => setVideoFailed(true)}
-        />
-      ) : null}
+      <ResponsiveVideo
+        baseName="analytics-loop"
+        className="absolute inset-0 h-full w-full opacity-20 blur-[1px]"
+        preload="none"
+        rootMargin="420px"
+      />
       <div className="analytics-chart-glow absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gilt/20 blur-3xl" />
       <div className="relative p-4 sm:p-5">
         <div className="overflow-hidden border border-gilt/24 bg-black/70">

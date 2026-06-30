@@ -4,16 +4,17 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLanguage } from "@/components/LanguageProvider";
+import ResponsiveVideo from "@/components/ResponsiveVideo";
 import { useLenisSmoothScroll } from "@/lib/motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const videoScenes = [
-  "/videos/hero-fashion-loop.mp4",
-  "/videos/scarf-loop.mp4",
-  "/videos/handbag-loop.mp4",
-  "/videos/snaplink-phone-loop.mp4",
-  "/videos/analytics-loop.mp4"
+  "hero-fashion-loop",
+  "scarf-loop",
+  "handbag-loop",
+  "snaplink-phone-loop",
+  "analytics-loop"
 ];
 
 const storyScenes = [
@@ -93,27 +94,21 @@ const previewCards = [
   }
 ];
 
-function CinematicVideoLayer({ index, src }: { index: number; src: string }) {
-  const [failed, setFailed] = useState(false);
-
+function CinematicVideoLayer({ baseName, index }: { baseName: string; index: number }) {
   return (
     <div
       className="cinematic-video-layer absolute inset-0 media-fallback opacity-0"
       data-scene={index}
       aria-hidden="true"
     >
-      {!failed ? (
-        <video
-          className="h-full w-full object-cover"
-          src={src}
-          muted
-          playsInline
-          autoPlay
-          loop
-          preload={index === 0 ? "auto" : "metadata"}
-          onError={() => setFailed(true)}
-        />
-      ) : null}
+      <ResponsiveVideo
+        baseName={baseName}
+        className="h-full w-full"
+        eager={index === 0}
+        loadOnMobile={index === 0}
+        preload={index === 0 ? "metadata" : "none"}
+        rootMargin="0px"
+      />
     </div>
   );
 }
@@ -244,8 +239,8 @@ export default function Hero() {
   return (
     <section ref={sectionRef} className="relative min-h-[100svh] overflow-hidden sm:h-screen sm:min-h-screen">
       <div className="absolute inset-0">
-        {videoScenes.map((src, index) => (
-          <CinematicVideoLayer src={src} index={index} key={src} />
+        {videoScenes.map((baseName, index) => (
+          <CinematicVideoLayer baseName={baseName} index={index} key={baseName} />
         ))}
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,0.92),rgba(5,5,5,0.44),rgba(5,5,5,0.9))]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_48%,rgba(199,164,91,0.18),transparent_28rem)]" />

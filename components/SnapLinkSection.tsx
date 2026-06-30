@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLanguage } from "@/components/LanguageProvider";
+import ResponsiveVideo from "@/components/ResponsiveVideo";
 import { SNAPLINK_CONTACT } from "@/lib/snaplink-config";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -22,10 +23,6 @@ const features = [
 ];
 
 function PhoneScreen() {
-  const [videoFailed, setVideoFailed] = useState(false);
-  const [videoReady, setVideoReady] = useState(false);
-  const [imageFailed, setImageFailed] = useState(false);
-
   return (
     <div className="relative mx-auto w-full max-w-[390px] [perspective:1000px]">
       <div className="snap-phone-glow absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gilt/24 blur-3xl" />
@@ -33,47 +30,12 @@ function PhoneScreen() {
         <div className="rounded-[38px] border border-cream/10 bg-black p-3 shadow-[inset_0_0_40px_rgba(255,255,255,0.05)]">
           <div className="mx-auto mb-3 h-1.5 w-20 rounded-full bg-cream/18" />
           <div className="media-fallback relative aspect-[9/16] overflow-hidden rounded-[30px] border border-gilt/18 bg-black">
-            {!imageFailed ? (
-              <img
-                alt="SnapLink mobile profile preview"
-                className="absolute inset-0 h-full w-full object-cover"
-                src="/images/snaplink-mobile-profile-preview.jpg"
-                onError={() => setImageFailed(true)}
-              />
-            ) : null}
-            {!videoFailed ? (
-              <video
-                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
-                  videoReady ? "opacity-100" : "opacity-0"
-                }`}
-                src="/videos/snaplink-phone-loop.mp4"
-                muted
-                playsInline
-                autoPlay
-                loop
-                preload="metadata"
-                poster="/images/snaplink-mobile-profile-preview.jpg"
-                onCanPlay={() => setVideoReady(true)}
-                onLoadedData={() => setVideoReady(true)}
-                onError={() => setVideoFailed(true)}
-              />
-            ) : null}
-            {imageFailed ? (
-              <div className="flex h-full flex-col justify-between p-5">
-                <div>
-                  <p className="editorial-label text-[10px] text-gilt/80">SnapLink</p>
-                  <h3 className="mt-3 font-serif text-4xl leading-none text-cream">Mobile Profile</h3>
-                  <p className="mt-3 text-sm leading-6 text-cream/60">Booking, WhatsApp, reviews, website, directions, and lead capture in one profile.</p>
-                </div>
-                <div className="grid gap-2">
-                  {["Book Now", "WhatsApp", "Leave Review", "Get Directions"].map((item) => (
-                    <div className="border border-gilt/20 bg-cream/8 px-4 py-3 text-center text-sm text-cream" key={item}>
-                      {item}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : null}
+            <ResponsiveVideo
+              baseName="snaplink-phone-loop"
+              className="h-full w-full"
+              preload="none"
+              rootMargin="420px"
+            />
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(115deg,rgba(255,255,255,0.18),transparent_26%,transparent_62%,rgba(242,210,138,0.1))]" />
           </div>
         </div>

@@ -9,6 +9,7 @@ mkdir -p "$ORIGINALS_DIR"
 
 VIDEOS=(
   "update-hero-one"
+  "update-hero-three"
   "hero-fashion-loop"
   "scarf-loop"
   "handbag-loop"

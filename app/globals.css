@@ -244,6 +244,24 @@ textarea {
   animation: snaplink-coin-glow 5.8s ease-in-out infinite;
 }
 
+@media (max-width: 767px) {
+  .snaplink-coin-idle,
+  .snaplink-coin-glow,
+  .snaplink-coin-shine {
+    animation: none;
+  }
+
+  .snaplink-coin-scroll {
+    transform: rotateY(-8deg) rotateX(5deg);
+  }
+
+  .snaplink-coin,
+  .snaplink-coin-wrap:hover .snaplink-coin {
+    transform: none;
+    filter: drop-shadow(0 28px 48px rgba(0, 0, 0, 0.56));
+  }
+}
+
 .snaplink-marble-reflection {
   background:
     radial-gradient(ellipse at center, rgba(199, 164, 91, 0.24), rgba(0, 0, 0, 0.72) 58%, transparent 72%),

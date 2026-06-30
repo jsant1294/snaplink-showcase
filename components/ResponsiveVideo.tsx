@@ -35,6 +35,7 @@ export default function ResponsiveVideo({
 }: ResponsiveVideoProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const retryRef = useRef<number | null>(null);
   const instanceId = useRef(`snaplink-video-${Math.random().toString(36).slice(2)}`);
   const [failed, setFailed] = useState(false);
   const [hasResolvedMedia, setHasResolvedMedia] = useState(false);
@@ -115,6 +116,11 @@ export default function ResponsiveVideo({
     const video = videoRef.current;
     if (!video) return;
 
+    if (retryRef.current) {
+      window.clearTimeout(retryRef.current);
+      retryRef.current = null;
+    }
+
     if (!autoPlayWhenVisible || !isPlayableVisible || reducedMotion) {
       video.pause();
       return;
@@ -123,9 +129,20 @@ export default function ResponsiveVideo({
     const play = video.play();
     if (play) {
       play.catch(() => {
-        setFailed(true);
+        retryRef.current = window.setTimeout(() => {
+          video.play().catch(() => {
+            // Keep the poster visible if Safari delays autoplay.
+          });
+        }, 450);
       });
     }
+
+    return () => {
+      if (retryRef.current) {
+        window.clearTimeout(retryRef.current);
+        retryRef.current = null;
+      }
+    };
   }, [autoPlayWhenVisible, isPlayableVisible, ready, reducedMotion, source]);
 
   useEffect(() => {

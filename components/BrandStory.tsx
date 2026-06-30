@@ -11,7 +11,10 @@ export default function BrandStory() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      window.matchMedia("(max-width: 767px)").matches
+    ) {
       return;
     }
 

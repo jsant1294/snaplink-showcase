@@ -97,7 +97,7 @@ const previewCards = [
 function CinematicVideoLayer({ baseName, index }: { baseName: string; index: number }) {
   return (
     <div
-      className="cinematic-video-layer absolute inset-0 media-fallback opacity-0"
+      className={`cinematic-video-layer absolute inset-0 media-fallback ${index === 0 ? "opacity-100" : "opacity-0"}`}
       data-scene={index}
       aria-hidden="true"
     >
@@ -105,7 +105,7 @@ function CinematicVideoLayer({ baseName, index }: { baseName: string; index: num
         baseName={baseName}
         className="h-full w-full"
         eager={index === 0}
-        loadOnMobile={index === 0}
+        loadOnMobile={false}
         preload={index === 0 ? "metadata" : "none"}
         rootMargin="0px"
       />
@@ -237,7 +237,68 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative min-h-[100svh] overflow-hidden sm:h-screen sm:min-h-screen">
+    <>
+    <section className="relative overflow-hidden bg-obsidian sm:hidden">
+      <div className="pointer-events-none absolute left-5 top-5 z-30 flex items-center gap-3">
+        <img
+          alt="SnapLink gold mark"
+          className="h-11 w-11 rounded-full border border-gilt/25 bg-black/55 object-contain p-1.5 shadow-gold"
+          src="/brand/snaplink-mark-gold.png"
+        />
+      </div>
+
+      {storyScenes.map((scene, index) => (
+        <article
+          className="relative flex min-h-[100svh] items-center overflow-hidden px-6 py-28"
+          key={scene.eyebrow.en}
+        >
+          <div className="absolute inset-0">
+            <ResponsiveVideo
+              baseName={videoScenes[index]}
+              className="h-full w-full"
+              eager={index === 0}
+              loadOnMobile
+              mobileOnly
+              preload={index === 0 ? "metadata" : "none"}
+              rootMargin="520px"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.58),rgba(5,5,5,0.36)_34%,rgba(5,5,5,0.88))]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_68%_24%,rgba(199,164,91,0.18),transparent_18rem)]" />
+          </div>
+
+          <div className="relative z-10 mx-auto w-full max-w-[680px]">
+            <p className="editorial-label mb-5 text-xs text-gilt/90">{t(scene.eyebrow)}</p>
+            <h1 className="font-serif text-[clamp(3.4rem,15vw,5.8rem)] font-medium leading-[0.95] text-cream">
+              {t(scene.headline)}
+            </h1>
+            <p className="mt-7 text-lg leading-9 text-cream/78">{t(scene.body)}</p>
+            {scene.badge ? (
+              <p className="mt-7 inline-flex border border-gilt/28 bg-black/34 px-4 py-3 text-[11px] uppercase tracking-[0.16em] text-gilt/90">
+                {t(scene.badge)}
+              </p>
+            ) : null}
+            {index === 0 ? (
+              <div className="mt-10 grid gap-3">
+                <a
+                  href="#vip"
+                  className="inline-flex min-h-14 items-center justify-center border border-gilt bg-gilt px-7 text-sm font-semibold text-black transition hover:bg-cream"
+                >
+                  {t({ en: "Build My SnapLink", es: "Crear mi SnapLink" })}
+                </a>
+                <a
+                  href="#collection"
+                  className="inline-flex min-h-14 items-center justify-center border border-cream/35 bg-black/24 px-7 text-sm font-semibold text-cream transition hover:border-gilt hover:text-gilt"
+                >
+                  {t({ en: "See Demo", es: "Ver demo" })}
+                </a>
+              </div>
+            ) : null}
+          </div>
+        </article>
+      ))}
+    </section>
+
+    <section ref={sectionRef} className="relative hidden min-h-[100svh] overflow-hidden sm:block sm:h-screen sm:min-h-screen">
       <div className="absolute inset-0">
         {videoScenes.map((baseName, index) => (
           <CinematicVideoLayer baseName={baseName} index={index} key={baseName} />
@@ -313,5 +374,6 @@ export default function Hero() {
         <div className="h-1/2 w-full animate-[shine_2.2s_ease-in-out_infinite] bg-gilt" />
       </div>
     </section>
+    </>
   );
 }

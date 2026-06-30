@@ -9,6 +9,7 @@ type ResponsiveVideoProps = {
   desktopSrc?: string;
   eager?: boolean;
   loadOnMobile?: boolean;
+  mobileOnly?: boolean;
   mobileSrc?: string;
   poster?: string;
   posterClassName?: string;
@@ -24,6 +25,7 @@ export default function ResponsiveVideo({
   desktopSrc,
   eager = false,
   loadOnMobile = true,
+  mobileOnly = false,
   mobileSrc,
   poster,
   posterClassName = "",
@@ -45,7 +47,13 @@ export default function ResponsiveVideo({
   const mobile = mobileSrc ?? `/videos/${baseName}.mobile.mp4`;
   const posterSrc = poster ?? `/videos/${baseName}.poster.webp`;
   const source = isMobile ? mobile : desktop;
-  const canLoadVideo = hasResolvedMedia && !failed && !reducedMotion && isVisible && (!isMobile || loadOnMobile);
+  const canLoadVideo =
+    hasResolvedMedia &&
+    !failed &&
+    !reducedMotion &&
+    isVisible &&
+    (!mobileOnly || isMobile) &&
+    (!isMobile || loadOnMobile);
 
   useEffect(() => {
     const mobileQuery = window.matchMedia("(max-width: 767px)");

@@ -23,6 +23,7 @@ const features = [
 
 function PhoneScreen() {
   const [videoFailed, setVideoFailed] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
 
   return (
@@ -32,9 +33,19 @@ function PhoneScreen() {
         <div className="rounded-[38px] border border-cream/10 bg-black p-3 shadow-[inset_0_0_40px_rgba(255,255,255,0.05)]">
           <div className="mx-auto mb-3 h-1.5 w-20 rounded-full bg-cream/18" />
           <div className="media-fallback relative aspect-[9/16] overflow-hidden rounded-[30px] border border-gilt/18 bg-black">
+            {!imageFailed ? (
+              <img
+                alt="SnapLink mobile profile preview"
+                className="absolute inset-0 h-full w-full object-cover"
+                src="/images/snaplink-mobile-profile-preview.jpg"
+                onError={() => setImageFailed(true)}
+              />
+            ) : null}
             {!videoFailed ? (
               <video
-                className="h-full w-full object-cover"
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+                  videoReady ? "opacity-100" : "opacity-0"
+                }`}
                 src="/videos/snaplink-phone-loop.mp4"
                 muted
                 playsInline
@@ -42,16 +53,12 @@ function PhoneScreen() {
                 loop
                 preload="metadata"
                 poster="/images/snaplink-mobile-profile-preview.jpg"
+                onCanPlay={() => setVideoReady(true)}
+                onLoadedData={() => setVideoReady(true)}
                 onError={() => setVideoFailed(true)}
               />
-            ) : !imageFailed ? (
-              <img
-                alt="SnapLink mobile profile preview"
-                className="h-full w-full object-cover"
-                src="/images/snaplink-mobile-profile-preview.jpg"
-                onError={() => setImageFailed(true)}
-              />
-            ) : (
+            ) : null}
+            {imageFailed ? (
               <div className="flex h-full flex-col justify-between p-5">
                 <div>
                   <p className="editorial-label text-[10px] text-gilt/80">SnapLink</p>
@@ -66,7 +73,7 @@ function PhoneScreen() {
                   ))}
                 </div>
               </div>
-            )}
+            ) : null}
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(115deg,rgba(255,255,255,0.18),transparent_26%,transparent_62%,rgba(242,210,138,0.1))]" />
           </div>
         </div>

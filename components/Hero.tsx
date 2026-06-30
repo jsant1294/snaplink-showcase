@@ -17,8 +17,6 @@ const videoScenes = [
   "analytics-loop"
 ];
 
-const portraitDesktopVideos = new Set(["update-hero-one", "update-hero-three"]);
-
 const storyScenes = [
   {
     eyebrow: { en: "SNAPLINK SHOWCASE", es: "DEMO SNAPLINK" },
@@ -97,44 +95,20 @@ const previewCards = [
 ];
 
 function CinematicVideoLayer({ baseName, index }: { baseName: string; index: number }) {
-  const isPortrait = portraitDesktopVideos.has(baseName);
-
   return (
     <div
       className={`cinematic-video-layer absolute inset-0 media-fallback ${index === 0 ? "opacity-100" : "opacity-0"}`}
       data-scene={index}
       aria-hidden="true"
     >
-      {isPortrait ? (
-        <>
-          <img
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full scale-110 object-cover opacity-45 blur-2xl"
-            src={`/videos/${baseName}.poster.webp`}
-          />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_54%_48%,rgba(199,164,91,0.16),transparent_28rem),linear-gradient(90deg,rgba(5,5,5,0.82),rgba(5,5,5,0.3),rgba(5,5,5,0.82))]" />
-          <ResponsiveVideo
-            baseName={baseName}
-            className="absolute left-[57%] top-1/2 aspect-[9/16] h-[82vh] max-h-[820px] -translate-x-1/2 -translate-y-1/2 rounded-[10px] border border-gilt/18 bg-black/40 shadow-velvet"
-            eager
-            loadOnMobile={false}
-            posterClassName="object-cover"
-            preload={index === 0 ? "metadata" : "none"}
-            rootMargin="0px"
-            videoClassName="object-cover"
-          />
-        </>
-      ) : (
-        <ResponsiveVideo
-          baseName={baseName}
-          className="h-full w-full"
-          eager
-          loadOnMobile={false}
-          preload={index === 0 ? "metadata" : "none"}
-          rootMargin="0px"
-        />
-      )}
+      <ResponsiveVideo
+        baseName={baseName}
+        className="h-full w-full"
+        eager
+        loadOnMobile={false}
+        preload={index === 0 ? "metadata" : "none"}
+        rootMargin="0px"
+      />
     </div>
   );
 }
@@ -384,7 +358,7 @@ export default function Hero() {
           ))}
         </div>
 
-        <div className="cinematic-object-stage pointer-events-none hidden [perspective:1000px] 2xl:relative 2xl:bottom-auto 2xl:right-auto 2xl:mx-auto 2xl:flex 2xl:h-[520px] 2xl:w-full 2xl:max-w-[440px]">
+        <div className="cinematic-object-stage pointer-events-none hidden [perspective:1000px] sm:relative sm:bottom-auto sm:right-auto sm:mx-auto sm:flex sm:h-[420px] sm:w-full sm:max-w-[360px] lg:h-[520px] lg:max-w-[440px]">
           <div className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gilt/15 blur-3xl" />
           {objectScenes.map((object, index) => (
             <div

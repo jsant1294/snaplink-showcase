@@ -33,7 +33,9 @@ export default function ResponsiveVideo({
 }: ResponsiveVideoProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const instanceId = useRef(`snaplink-video-${Math.random().toString(36).slice(2)}`);
   const [failed, setFailed] = useState(false);
+  const [hasResolvedMedia, setHasResolvedMedia] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isVisible, setIsVisible] = useState(eager);
   const [ready, setReady] = useState(false);
@@ -43,7 +45,7 @@ export default function ResponsiveVideo({
   const mobile = mobileSrc ?? `/videos/${baseName}.mobile.mp4`;
   const posterSrc = poster ?? `/videos/${baseName}.poster.webp`;
   const source = isMobile ? mobile : desktop;
-  const canLoadVideo = !failed && !reducedMotion && isVisible && (!isMobile || loadOnMobile);
+  const canLoadVideo = hasResolvedMedia && !failed && !reducedMotion && isVisible && (!isMobile || loadOnMobile);
 
   useEffect(() => {
     const mobileQuery = window.matchMedia("(max-width: 767px)");
@@ -52,6 +54,7 @@ export default function ResponsiveVideo({
     const sync = () => {
       setIsMobile(mobileQuery.matches);
       setReducedMotion(motionQuery.matches);
+      setHasResolvedMedia(true);
     };
 
     sync();
@@ -63,6 +66,11 @@ export default function ResponsiveVideo({
       motionQuery.removeEventListener("change", sync);
     };
   }, []);
+
+  useEffect(() => {
+    setReady(false);
+    setFailed(false);
+  }, [source]);
 
   useEffect(() => {
     const element = wrapperRef.current;
@@ -96,6 +104,26 @@ export default function ResponsiveVideo({
     }
   }, [autoPlayWhenVisible, isVisible, ready, reducedMotion, source]);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !isMobile) return;
+
+    const handleOtherVideoPlay = (event: Event) => {
+      const activeId = (event as CustomEvent<string>).detail;
+      if (activeId !== instanceId.current) {
+        video.pause();
+      }
+    };
+
+    window.addEventListener("snaplink-video-play", handleOtherVideoPlay);
+    return () => window.removeEventListener("snaplink-video-play", handleOtherVideoPlay);
+  }, [isMobile, source]);
+
+  const announceActiveVideo = () => {
+    if (!isMobile) return;
+    window.dispatchEvent(new CustomEvent("snaplink-video-play", { detail: instanceId.current }));
+  };
+
   return (
     <div ref={wrapperRef} className={`relative overflow-hidden ${className}`}>
       <img
@@ -123,6 +151,7 @@ export default function ResponsiveVideo({
           onCanPlay={() => setReady(true)}
           onError={() => setFailed(true)}
           onLoadedData={() => setReady(true)}
+          onPlay={announceActiveVideo}
         />
       ) : null}
     </div>
